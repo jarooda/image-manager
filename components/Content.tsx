@@ -1,8 +1,3 @@
-"use client"
-
-import Image from "next/image"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Button } from "@/components/ui/button"
 import {
   Pagination,
   PaginationContent,
@@ -12,11 +7,9 @@ import {
   PaginationNext,
   PaginationPrevious
 } from "@/components/ui/pagination"
-import { useToast } from "@/components/ui/use-toast"
+import ImageCard from "./ImageCard"
 
 export default function Content() {
-  const { toast } = useToast()
-
   const imageLists = [
     {
       src: "https://cdn.sekolah.mu/assets/socialmedia/linkedin.svg",
@@ -64,27 +57,7 @@ export default function Content() {
     <main className=" p-4 flex flex-col justify-between h-full">
       <div className=" flex flex-wrap gap-4">
         {imageLists.map((image, index) => (
-          <button
-            key={index}
-            className=" w-52 hover:border border-primary p-2 rounded-md cursor-copy"
-            onClick={() => {
-              toast({
-                duration: 1000,
-                description: 'Link copied to clipboard'
-              })
-            }}
-          >
-            <AspectRatio ratio={1 / 1}>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                className="rounded-md object-contain"
-              />
-            </AspectRatio>
-            <span className=" text-xs break-all">{image.src}</span>
-          </button>
-          // </Button>
+          <ImageCard key={index} image={image} />
         ))}
       </div>
       <Pagination>
