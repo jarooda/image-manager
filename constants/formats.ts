@@ -8,7 +8,7 @@ export default [
     label: ".png"
   },
   {
-    key: "jpg",
+    key: "jpeg",
     label: ".jpg / .jpeg"
   },
   {

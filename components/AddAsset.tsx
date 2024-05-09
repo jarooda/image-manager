@@ -1,5 +1,7 @@
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
+import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
@@ -8,6 +10,17 @@ import AddAssetMultiple from "./AddAssetMultiple"
 
 export default function AddAsset() {
   const [isOpen, setIsOpen] = useState(false)
+  const { toast } = useToast()
+  const router = useRouter()
+
+  function closeWithMessage(text: string) {
+    toast({
+      duration: 1000,
+      description: text
+    })
+    setIsOpen(false)
+    router.push("/")
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -18,13 +31,9 @@ export default function AddAsset() {
       </DialogTrigger>
       <DialogContent className="w-[916px]">
         <div className=" flex">
-          <AddAssetSingle />
+          <AddAssetSingle setClose={closeWithMessage} />
           <Separator orientation="vertical" />
-          <AddAssetMultiple
-            setClose={() => {
-              setIsOpen(false)
-            }}
-          />
+          <AddAssetMultiple setClose={closeWithMessage} />
         </div>
       </DialogContent>
     </Dialog>

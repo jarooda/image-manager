@@ -1,20 +1,120 @@
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { uploadAndSave } from "@/app/actions"
+
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
 import CategorySelect from "./CategorySelect"
 
-export default function AddAssetSingle() {
+const MAX_FILE_SIZE = 1000000 // 1MB
+const ACCEPTED_IMAGE_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/svg+xml",
+  "image/webp"
+]
+const formSchema = z.object({
+  file: z.any().refine((file) => {
+    if (!file) return false
+    if (file.size > MAX_FILE_SIZE) return false
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) return false
+    return true
+  }),
+  category: z.string().min(1, {
+    message: "Must not be empty"
+  })
+})
+
+export default function AddAssetSingle({
+  setClose
+}: {
+  setClose: (message: string) => void
+}) {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema)
+  })
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { file, category } = values
+    const fileName = file.name.trim()
+    const type = file.type.split("/")[1]
+    const format = type === "svg+xml" ? "svg" : type
+
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("name", fileName)
+
+    const payload:UploadAndSavePayload = {
+      name: fileName,
+      file: formData,
+      category,
+      format,
+      fileType: file.type
+    }
+    uploadAndSave(payload)
+    setClose("Saving to database...")
+  }
+
   return (
     <div className=" flex flex-col w-full">
       <h1 className="text-2xl font-bold text-center">Upload Single Asset</h1>
       <div className="grid items-center gap-1.5 p-4 w-full">
-        <Label htmlFor="asset">Asset</Label>
-        <Input id="asset" type="file" className=" mb-4" accept="image/*" />
-
-        <Label htmlFor="category">Category</Label>
-        <CategorySelect onSelect={() => ""} field={{ value: "" }} />
-
-        <Button className=" w-full mt-4">Upload Asset</Button>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="file"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <Label htmlFor="file">Asset</Label>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      type="file"
+                      className=" mb-4"
+                      accept="image/*"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="category">Category</Label>
+                  <CategorySelect
+                    field={field}
+                    onSelect={(value) => {
+                      form.setValue("category", value)
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button className=" w-full mt-4" type="submit">
+              Upload Asset
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   )
