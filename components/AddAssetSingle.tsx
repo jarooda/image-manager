@@ -12,7 +12,7 @@ export default function AddAssetSingle() {
         <Input id="asset" type="file" className=" mb-4" accept="image/*" />
 
         <Label htmlFor="category">Category</Label>
-        <CategorySelect />
+        <CategorySelect onSelect={() => ""} field={{ value: "" }} />
 
         <Button className=" w-full mt-4">Upload Asset</Button>
       </div>

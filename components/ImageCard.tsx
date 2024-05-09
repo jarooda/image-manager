@@ -4,16 +4,13 @@ import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { useToast } from "@/components/ui/use-toast"
 
 type ImageCardProps = {
-  image: {
-    src: string
-    alt: string
-  }
+  image: ImageAsset
 }
 
 export default function ImageCard({ image }: ImageCardProps) {
   const { toast } = useToast()
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(image.src)
+    navigator.clipboard.writeText(image.url)
     toast({
       duration: 1000,
       description: "Link copied to clipboard"
@@ -27,13 +24,13 @@ export default function ImageCard({ image }: ImageCardProps) {
     >
       <AspectRatio ratio={1 / 1}>
         <Image
-          src={image.src}
-          alt={image.alt}
+          src={image.url}
+          alt={image.url}
           fill
           className="rounded-md object-contain"
         />
       </AspectRatio>
-      <span className=" text-xs break-all">{image.src}</span>
+      <span className=" text-xs break-all">{image.url}</span>
     </button>
   )
 }

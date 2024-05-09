@@ -5,11 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function debounce<T extends (...args: any[]) => any>(func: T, wait = 20) {
-  let timeout: ReturnType<typeof setTimeout>
-  return function (this: any, ...args: Parameters<T>) {
-    const context = this
-    clearTimeout(timeout)
-    timeout = setTimeout(() => func.apply(context, args), wait)
-  } as T
+export function pageToRange(page: number, itemsPerPage: number = 10) {
+  const offset = (page - 1) * itemsPerPage
+  return [offset, offset + itemsPerPage - 1]
+}
+
+export function objectToQueryString(obj: Record<string, any>) {
+  return new URLSearchParams(obj).toString()
 }

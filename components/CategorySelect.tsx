@@ -19,9 +19,16 @@ import {
 import { cn } from "@/lib/utils"
 import { Category } from "@/constants"
 
-export default function CategorySelect() {
+type CategoryProps = {
+  field: {
+    value: string
+  }
+  onSelect: (value: string) => void
+}
+
+export default function CategorySelect({ field, onSelect }: CategoryProps) {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState(field.value)
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
@@ -49,6 +56,7 @@ export default function CategorySelect() {
                 value={category.key}
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue)
+                  onSelect(currentValue === value ? "" : currentValue)
                   setOpen(false)
                 }}
               >
