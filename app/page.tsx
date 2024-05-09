@@ -1,3 +1,4 @@
+import { createClient } from "@/utils/supabase/server"
 import { fetchAssets } from "@/lib/supabase"
 
 import {
@@ -24,6 +25,7 @@ export default async function Index({ searchParams }: Props) {
   const page = searchParams.page ? +searchParams.page : 1
   const format = searchParams.format ? searchParams.format.split(",") : []
   const category = searchParams.category || ""
+  const client = createClient()
 
   const payload = {
     search,
@@ -33,7 +35,7 @@ export default async function Index({ searchParams }: Props) {
     },
     page
   }
-  const { data: images, status, message, count } = await fetchAssets(payload)
+  const { data: images, status, message, count } = await fetchAssets(payload, client)
 
   const query = {
     page,

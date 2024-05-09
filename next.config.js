@@ -4,7 +4,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.sekolah.mu",
+        hostname: "cdn.jaluwibowo.id",
+        port: "",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: process.env.NEXT_CDN_HOSTNAME,
         port: "",
         pathname: "/**"
       }

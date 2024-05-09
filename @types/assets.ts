@@ -27,3 +27,9 @@ type QueryParams = {
   format?: string[]
   category?: string
 }
+
+type SaveAssetPayload = {
+  url: string
+  category?: string
+  format: string
+}

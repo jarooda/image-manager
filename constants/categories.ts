@@ -1,5 +1,29 @@
 export default [
   {
+    key: 'action',
+    label: 'Action'
+  },
+  {
+    key: 'account',
+    label: 'Account'
+  },
+  {
+    key: 'aktivitas-tambahan',
+    label: 'Aktivitas Tambahan'
+  },
+  {
+    key: 'class-package',
+    label: 'Class Package'
+  },
+  {
+    key: 'dashboard',
+    label: 'Dashboard'
+  },
+  {
+    key: 'default-illustration',
+    label: 'Default Illustration'
+  },
+  {
     key: 'empty-state',
     label: 'Empty State'
   },
@@ -8,79 +32,55 @@ export default [
     label: 'Error State'
   },
   {
-    key: 'waiting-state',
-    label: 'Waiting State'
-  },
-  {
-    key: 'payment',
-    label: 'Payment'
-  },
-  {
-    key: 'account',
-    label: 'Account'
-  },
-  {
-    key: 'action',
-    label: 'Action'
-  },
-  {
-    key: 'class-package',
-    label: 'Class Package'
-  },
-  {
-    key: 'learning',
-    label: 'Learning'
-  },
-  {
-    key: 'validation',
-    label: 'Validation'
-  },
-  {
-    key: 'portofolio',
-    label: 'Portofolio'
-  },
-  {
-    key: 'tanyamu',
-    label: 'Tanyamu'
-  },
-  {
-    key: 'living-class',
-    label: 'Living Class'
-  },
-  {
-    key: 'aktivitas-tambahan',
-    label: 'Aktivitas Tambahan'
-  },
-  {
-    key: 'photo-profile',
-    label: 'Photo Profile'
-  },
-  {
-    key: 'default-illustration',
-    label: 'Default Illustration'
-  },
-  {
-    key: 'living-page',
-    label: 'Living Page'
-  },
-  {
-    key: 'dashboard',
-    label: 'Dashboard'
+    key: 'icon',
+    label: 'Icon'
   },
   {
     key: 'loading-state',
     label: 'Loading State'
   },
   {
-    key: 'verification',
-    label: 'Verification'
+    key: 'living-class',
+    label: 'Living Class'
+  },
+  {
+    key: 'living-page',
+    label: 'Living Page'
+  },
+  {
+    key: 'payment',
+    label: 'Payment'
+  },
+  {
+    key: 'photo-profile',
+    label: 'Photo Profile'
+  },
+  {
+    key: 'portofolio',
+    label: 'Portofolio'
+  },
+  {
+    key: 'profile-picture',
+    label: 'Profile Picture'
   },
   {
     key: 'success-state',
     label: 'Success State'
   },
   {
-    key: 'profile-picture',
-    label: 'Profile Picture'
+    key: 'tanyamu',
+    label: 'Tanyamu'
+  },
+  {
+    key: 'validation',
+    label: 'Validation'
+  },
+  {
+    key: 'verification',
+    label: 'Verification'
+  },
+  {
+    key: 'waiting-state',
+    label: 'Waiting State'
   }
 ]
