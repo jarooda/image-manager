@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { uploadAndSave } from "@/app/actions"
+import { uploadMedia, saveAsset } from "@/app/actions"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -48,22 +48,27 @@ export default function AddAssetSingle({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { file, category } = values
-    const fileName = file.name.trim()
+    const name = file.name.trim()
     const type = file.type.split("/")[1]
     const format = type === "svg+xml" ? "svg" : type
+    const fileName = `${category}/${name}`
 
     const formData = new FormData()
     formData.append("file", file)
     formData.append("name", fileName)
 
-    const payload:UploadAndSavePayload = {
-      name: fileName,
-      file: formData,
-      category,
-      format,
-      fileType: file.type
+    const upload = await uploadMedia(formData)
+
+    if (upload.status) {
+      const payload: SaveAssetPayload = {
+        url: upload.imageUrl,
+        category,
+        format
+      }
+
+      await saveAsset(payload)
     }
-    uploadAndSave(payload)
+
     setClose("Saving to database...")
   }
 

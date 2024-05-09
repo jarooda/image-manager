@@ -1,9 +1,8 @@
 "use server"
-import fs from "fs"
 
 import { createClient } from "@/utils/supabase/server"
 import { createAsset } from "@/lib/supabase"
-import { uploadToS3 } from "@/lib/aws"
+
 import { addHttps } from "@/lib/utils"
 
 export async function saveAsset(asset: SaveAssetPayload) {
@@ -12,44 +11,43 @@ export async function saveAsset(asset: SaveAssetPayload) {
   createAsset(asset, client)
 }
 
-export async function uploadAndSave({
-  name,
-  file,
-  category,
-  format,
-  fileType
-}: UploadAndSavePayload) {
-  const fullPath = `${category}/${name}`
-  file.append("fullPath", fullPath)
-  file.append("fileType", fileType)
+export async function uploadMedia(formData: any) {
+  try {
+    const file = formData.get("file")
+    const fileName = formData.get("name")
 
-  // ? this is using API
-  // const s3Result = await uploadFormDataToS3(file)
+    // POST request to backend route handler
+    const BASE_URL = process.env.NEXT_BASE_URL
+    const res = await fetch(`${BASE_URL}/api/upload`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fileName,
+        fileType: file.type,
+        fileSize: file.size
+      })
+    })
 
-  // ? this is using server action
-  const s3Result = await uploadToS3(file, fullPath, fileType)
-  console.log(s3Result, ' ini s3Result');
-  
-  // const key = s3Result.Key
-  // const asset: SaveAssetPayload = {
-  //   url: addHttps(process.env.NEXT_AWS_BUCKET_NAME + "/" + key),
-  //   category,
-  //   format
-  // }
-  // saveAsset(asset)
-}
+    // Response includes a putUrl for upload and a getUrl for displaying a preview
+    const { putUrl, getUrl } = await res.json()
 
-// Function to upload FormData to S3
-async function uploadFormDataToS3(
-  formData: FormData
-) {
-  const response = await fetch("http://localhost:3000/api/upload", {
-    method: "POST",
-    body: formData
-  })
+    // Request made to putUrl, media file included in body
+    const uploadResponse = await fetch(putUrl, {
+      body: file,
+      method: "PUT",
+      headers: { "Content-Type": file.type }
+    })
 
-  if (!response.ok) {
-    throw new Error("Failed to upload file to S3")
+    const path = process.env.NEXT_AWS_PATH
+      ? `${process.env.NEXT_AWS_PATH}/`
+      : ""
+    const imageUrl = addHttps(
+      `${process.env.NEXT_AWS_BUCKET_NAME}/${path}${fileName}`
+    )
+
+    return { status: uploadResponse.ok, uploadedUrl: getUrl, imageUrl }
+  } catch (error) {
+    console.error(error)
+    throw error
   }
-  return await response.json()
 }

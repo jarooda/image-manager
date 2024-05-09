@@ -1,40 +1,40 @@
-import { NextResponse } from 'next/server'
+// Relevant imports
+import { NextResponse, NextRequest } from "next/server"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
+import { client } from "@/utils/aws/client"
 
-import fs from "fs"
-import s3 from "@/utils/aws/server"
-
-export const dynamic = 'force-dynamic' // defaults to auto
-export async function POST(req: Request, res: Response) {
+const POST = async (req: NextRequest) => {
   try {
-    console.log(req.body, ' ini req');
-
-    const formData = await req.formData()
-    
-    // Get file data from request body
-    // const { fullPath, fileType } = req.body
-    const fileData = formData.get('file')
-    const fullPath = formData.get('fullPath')
-    const fileType = formData.get('fileType')
-    console.log(' guoblok');
-
-    const fileStream = require('stream').Readable.from(fileData);
-    
-    // Upload file to S3
-    const uploadParams = {
-      Bucket: process.env.NEXT_AWS_BUCKET_NAME || "",
-      Key: fullPath,
-      Body: fileStream,
-      ContentType: fileType
+    const { fileName, fileType, fileSize } = await req.json()
+    if (!fileType || !fileName || !fileSize) {
+      throw new Error("There was a problem with the file!")
     }
 
-    const data = await s3.upload(uploadParams).promise()
+    // PutObjectCommand: used to generate a pre-signed URL for uploading
+    const putCommand = new PutObjectCommand({
+      Key: process.env.NEXT_AWS_PATH + "/" + fileName,
+      ContentType: fileType,
+      Bucket: process.env.NEXT_AWS_BUCKET_NAME,
+      ACL: "public-read"
+    })
+    // Generate pre-signed URL for PUT request
+    const putUrl = await getSignedUrl(client, putCommand, { expiresIn: 600 })
 
-    console.log(data);
-    
-    return NextResponse.json({ message: 'success' }, { status: 200 })
+    // GetObjectCommand: used to generate a pre-signed URL for viewing.
+    const getCommand = new GetObjectCommand({
+      Key: process.env.NEXT_AWS_PATH + "/" + fileName,
+      Bucket: process.env.NEXT_AWS_BUCKET_NAME
+    })
+
+    // Generate pre-signed URL for GET request
+    const getUrl = await getSignedUrl(client, getCommand, { expiresIn: 600 })
+
+    return NextResponse.json({ putUrl, getUrl }, { status: 200 })
   } catch (error) {
-    console.error("Error uploading file to S3:", error)
-    return NextResponse.json({ message: 'Failed to upload file to S3' }, { status: 400 })
-    // res.status(500).json({ error: "Failed to upload file to S3" })
+    console.error(error)
+    throw error
   }
 }
+
+export { POST }
