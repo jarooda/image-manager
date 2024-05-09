@@ -33,3 +33,10 @@ type SaveAssetPayload = {
   category?: string
   format: string
 }
+type UploadAndSavePayload = {
+  file: File | any
+  name: string
+  category: string
+  format: string
+  fileType: string
+}

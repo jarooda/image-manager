@@ -3,11 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useRouter } from "next/navigation"
 
 import { saveAsset } from "@/app/actions"
 
-import { useToast } from "@/components/ui/use-toast"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -20,23 +18,19 @@ import {
 } from "@/components/ui/form"
 import TooltipIcon from "./TooltipIcon"
 
+import { addHttps } from "@/lib/utils"
+
 const formSchema = z.object({
   asset: z.string().min(1, {
     message: "Must not be empty"
   })
 })
 
-function addHttps(url: string) {
-  return url.startsWith("http") ? url : `https://${url}`
-}
-
 export default function AddAssetMultiple({
   setClose
 }: {
-  setClose: () => void
+  setClose: (message: string) => void
 }) {
-  const { toast } = useToast()
-  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
   })
@@ -58,12 +52,7 @@ export default function AddAssetMultiple({
       saveAsset(asset)
     })
 
-    toast({
-      duration: 1000,
-      description: 'Saving to database...'
-    })
-    setClose()
-    router.push("/")
+    setClose('Saving to database...')
   }
 
   return (

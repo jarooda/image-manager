@@ -13,3 +13,7 @@ export function pageToRange(page: number, itemsPerPage: number = 10) {
 export function objectToQueryString(obj: Record<string, any>) {
   return new URLSearchParams(obj).toString()
 }
+
+export function addHttps(url: string) {
+  return url.startsWith("http") ? url : `https://${url}`
+}
