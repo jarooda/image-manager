@@ -1,20 +1,16 @@
 /** @type {import('next').NextConfig} */
+const hostnames = process.env.NEXT_CDN_HOSTNAMES.split(",").map((hostname) => {
+  return {
+    protocol: "https",
+    hostname: hostname,
+    port: "",
+    pathname: "/**"
+  }
+})
+
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.jaluwibowo.id",
-        port: "",
-        pathname: "/**"
-      },
-      {
-        protocol: "https",
-        hostname: process.env.NEXT_CDN_HOSTNAME,
-        port: "",
-        pathname: "/**"
-      }
-    ]
+    remotePatterns: hostnames
   }
 }
 
