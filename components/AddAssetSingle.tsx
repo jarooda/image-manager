@@ -48,7 +48,7 @@ export default function AddAssetSingle({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { file, category } = values
-    const name = file.name.trim()
+    const name = file.name.replace(/\s/g,'-')
     const type = file.type.split("/")[1]
     const format = type === "svg+xml" ? "svg" : type
     const fileName = `${category}/${name}`
@@ -66,7 +66,7 @@ export default function AddAssetSingle({
         format
       }
 
-      await saveAsset(payload)
+      await saveAsset([payload])
     }
 
     setClose("Saving to database...")
