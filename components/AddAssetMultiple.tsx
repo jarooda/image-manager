@@ -48,10 +48,7 @@ export default function AddAssetMultiple({
       }
     })
 
-    assets.forEach((asset: SaveAssetPayload) => {
-      saveAsset(asset)
-    })
-
+    saveAsset(assets)
     setClose('Saving to database...')
   }
 

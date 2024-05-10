@@ -5,10 +5,10 @@ import { createAsset } from "@/lib/supabase"
 
 import { addHttps } from "@/lib/utils"
 
-export async function saveAsset(asset: SaveAssetPayload) {
+export async function saveAsset(assets: SaveAssetPayload[]) {
   const client = createClient()
 
-  createAsset(asset, client)
+  createAsset(assets, client)
 }
 
 export async function uploadMedia(formData: any) {

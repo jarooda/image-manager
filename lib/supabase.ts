@@ -31,6 +31,7 @@ export const fetchAssets = async (
       } = await supabase
         .from("assets")
         .select("*", { count: "exact" })
+        .order('id', { ascending: true })
         .like("url", `%${search}%`)
         .filter("category", "eq", category)
         .or(`format.in.(${formatString})`)
@@ -53,6 +54,7 @@ export const fetchAssets = async (
       } = await supabase
         .from("assets")
         .select("*", { count: "exact" })
+        .order('id', { ascending: true })
         .like("url", `%${search}%`)
         .or(`format.in.(${formatString})`)
         .range(ranges[0], ranges[1])
@@ -76,14 +78,14 @@ export const fetchAssets = async (
 }
 
 export const createAsset = async (
-  { url, category, format }: SaveAssetPayload,
+  assets: SaveAssetPayload[],
   client: any
 ) => {
   const supabase = client
 
   const { data } = await supabase
     .from("assets")
-    .insert([{ url, category, format }])
+    .insert(assets)
 
   return data
 }
