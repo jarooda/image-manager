@@ -1,8 +1,8 @@
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
-import { host } from "@/utils/config/host"
 import { createAsset } from "@/lib/supabase"
+
 import { addHttps } from "@/lib/utils"
 
 export async function saveAsset(assets: SaveAssetPayload[]) {
@@ -17,7 +17,7 @@ export async function uploadMedia(formData: any) {
     const fileName = formData.get("name")
 
     // POST request to backend route handler
-    const BASE_URL = host
+    const BASE_URL = process.env.NEXT_BASE_URL
     const res = await fetch(`${BASE_URL}/api/upload`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
