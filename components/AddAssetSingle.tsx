@@ -89,7 +89,7 @@ export default function AddAssetSingle({
                       {...fieldProps}
                       type="file"
                       className=" mb-4"
-                      accept="image/*"
+                      accept="image/webp"
                       onChange={(event) =>
                         onChange(event.target.files && event.target.files[0])
                       }
