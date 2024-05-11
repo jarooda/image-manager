@@ -51,3 +51,7 @@ export async function uploadMedia(formData: any) {
     throw error
   }
 }
+
+export async function authorizeUser(password: string) {
+  return password === process.env.NEXT_SECRET_CODE
+}

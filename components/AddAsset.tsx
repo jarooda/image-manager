@@ -7,9 +7,13 @@ import { Separator } from "@/components/ui/separator"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import AddAssetSingle from "./AddAssetSingle"
 import AddAssetMultiple from "./AddAssetMultiple"
+import AddAssetLogin from "./AddAssetLogin"
+
+import { cn } from "@/lib/utils"
 
 export default function AddAsset() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isAuthorized, setIsAuthorized] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
 
@@ -29,12 +33,23 @@ export default function AddAsset() {
           Add Asset
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[916px]">
-        <div className=" flex">
-          <AddAssetSingle setClose={closeWithMessage} />
-          <Separator orientation="vertical" />
-          <AddAssetMultiple setClose={closeWithMessage} />
-        </div>
+      <DialogContent
+        className={cn([
+          {
+            "w-[916px]": isAuthorized,
+            "w-[400px]": !isAuthorized
+          }
+        ])}
+      >
+        {isAuthorized ? (
+          <div className=" flex">
+            <AddAssetSingle setClose={closeWithMessage} />
+            <Separator orientation="vertical" />
+            <AddAssetMultiple setClose={closeWithMessage} />
+          </div>
+        ) : (
+          <AddAssetLogin setAuthorized={setIsAuthorized} />
+        )}
       </DialogContent>
     </Dialog>
   )

@@ -69,7 +69,7 @@ export default function AddAssetMultiple({
                   </Label>
                   <FormControl>
                     <Textarea
-                      className="resize-none h-[116px]"
+                      className="resize-none h-[124px]"
                       placeholder={`https://example.com/image1.jpg#error-state
 https://example.com/image2.jpg`}
                       {...field}

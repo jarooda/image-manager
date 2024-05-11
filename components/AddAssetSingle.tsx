@@ -103,7 +103,7 @@ export default function AddAssetSingle({
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className=" mt-3">
                   <Label htmlFor="category">Category</Label>
                   <CategorySelect
                     field={field}
