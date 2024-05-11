@@ -5,9 +5,10 @@ import { useToast } from "@/components/ui/use-toast"
 
 type ImageCardProps = {
   image: ImageAsset
+  index: number
 }
 
-export default function ImageCard({ image }: ImageCardProps) {
+export default function ImageCard({ image, index }: ImageCardProps) {
   const { toast } = useToast()
   const copyToClipboard = () => {
     navigator.clipboard.writeText(image.url)
@@ -28,6 +29,7 @@ export default function ImageCard({ image }: ImageCardProps) {
           alt={image.url}
           fill
           className="rounded-md object-contain"
+          priority={index < 18}
         />
       </AspectRatio>
       <span className=" text-xs break-all">{image.url}</span>

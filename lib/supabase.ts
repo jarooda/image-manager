@@ -7,10 +7,10 @@ export const fetchAssets = async (
 ): Promise<AssetResponse> => {
   const supabase = client
 
-  const { search, filter, page = 1 } = payload
+  const { search, filter, page = 1, perPage = 10 } = payload
   const allFormats = Format.map((format) => format.key)
   const { formats, category = "" } = filter
-  const ranges = pageToRange(page)
+  const ranges = pageToRange(page, perPage)
 
   const formatString =
     formats && formats.length > 0 ? formats.join(",") : allFormats.join(",")

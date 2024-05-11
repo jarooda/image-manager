@@ -89,7 +89,7 @@ export default function AddAssetSingle({
                       {...fieldProps}
                       type="file"
                       className=" mb-4"
-                      accept="image/*"
+                      accept="image/webp"
                       onChange={(event) =>
                         onChange(event.target.files && event.target.files[0])
                       }
@@ -103,7 +103,7 @@ export default function AddAssetSingle({
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className=" mt-3">
                   <Label htmlFor="category">Category</Label>
                   <CategorySelect
                     field={field}

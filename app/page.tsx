@@ -26,14 +26,16 @@ export default async function Index({ searchParams }: Props) {
   const format = searchParams.format ? searchParams.format.split(",") : []
   const category = searchParams.category || ""
   const client = createClient()
+  const ITEM_PER_PAGE = 10 // Hardcoded for now
 
-  const payload = {
+  const payload: SearchAssetPayload = {
     search,
     filter: {
       formats: format,
       category
     },
-    page
+    page,
+    perPage: ITEM_PER_PAGE
   }
   const { data: images, status, message, count } = await fetchAssets(payload, client)
 
@@ -57,7 +59,7 @@ export default async function Index({ searchParams }: Props) {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={1000}>
           {status === 200 ? (
-            <Content images={images} count={count} query={query} />
+            <Content images={images} count={count} query={query} itemsPerPage={ITEM_PER_PAGE} />
           ) : (
             <ErrorLog message={`Error: ${message}`} />
           )}
