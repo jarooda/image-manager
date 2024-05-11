@@ -5,6 +5,7 @@ type SearchAssetPayload = {
     category?: string
   }
   page?: number
+  perPage?: number
 }
 
 type ImageAsset = {
