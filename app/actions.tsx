@@ -45,7 +45,7 @@ export async function uploadMedia(formData: any) {
       `${process.env.NEXT_AWS_BUCKET_NAME}/${path}${fileName}`
     )
 
-    return { status: uploadResponse.ok, uploadedUrl: getUrl, imageUrl }
+    return { status: uploadResponse.ok, imageUrl }
   } catch (error) {
     console.error(error)
     throw error
