@@ -40,11 +40,12 @@ export default function AddAssetMultiple({
       const [url, category] = asset.split("#")
       const strings = url.split(".")
       const format = strings[strings.length - 1]
+      const imageFormat = format === "jpg" ? "jpeg" : format
 
       return {
         url: addHttps(url),
-        category,
-        format
+        category: category || '',
+        format: imageFormat
       }
     })
 
